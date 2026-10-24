@@ -1,0 +1,258 @@
+<!-- ==============================================================
+     УНИВЕРСАЛЬНАЯ ФОРМА ДЛЯ ЛЮБОГО ПРОЕКТА НА ТИЛЬДЕ (SSP-AGENCY)
+     Включает:
+     1. Выбор канала связи (Телефон / Telegram / WhatsApp / MAX).
+     2. Строго ОДНО поле ввода телефона с нативным выбором стран и флагами.
+     3. Высокий контраст (белый фон, темный текст, четкие подсказки).
+     4. Адаптив под мобильные (без сдвигов и обрезки номера).
+     5. Автосбор UTM-меток, гео, реферера и устройства в скрытый комментарий.
+============================================================== -->
+<style>
+  /* 1. Стили контейнера и переключателей каналов связи */
+  .ssp-contact-tabs {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 8px !important;
+    margin-bottom: 16px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  @media (max-width: 640px) {
+    .ssp-contact-tabs {
+      grid-template-columns: repeat(2, 1fr) !important;
+    }
+  }
+  .ssp-tab-btn {
+    background: rgba(255, 255, 255, 0.06) !important;
+    border: 1px solid rgba(244, 114, 182, 0.25) !important;
+    border-radius: 12px !important;
+    height: 46px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    color: #ffffff !important;
+    font-family: 'Montserrat', sans-serif !important;
+    font-size: 13.5px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    user-select: none !important;
+  }
+  .ssp-tab-btn:hover {
+    border-color: #f472b6 !important;
+    background: rgba(244, 114, 182, 0.12) !important;
+  }
+  .ssp-tab-btn.ssp-active[data-method="phone"] {
+    background: rgba(244, 114, 182, 0.22) !important;
+    border-color: #f472b6 !important;
+    box-shadow: 0 0 14px rgba(244, 114, 182, 0.4) !important;
+  }
+  .ssp-tab-btn.ssp-active[data-method="telegram"] {
+    background: rgba(34, 158, 217, 0.22) !important;
+    border-color: #229ED9 !important;
+    box-shadow: 0 0 14px rgba(34, 158, 217, 0.4) !important;
+  }
+  .ssp-tab-btn.ssp-active[data-method="whatsapp"] {
+    background: rgba(37, 211, 102, 0.22) !important;
+    border-color: #25D366 !important;
+    box-shadow: 0 0 14px rgba(37, 211, 102, 0.4) !important;
+  }
+  .ssp-tab-btn.ssp-active[data-method="max"] {
+    background: rgba(168, 85, 247, 0.22) !important;
+    border-color: #A855F7 !important;
+    box-shadow: 0 0 14px rgba(168, 85, 247, 0.4) !important;
+  }
+
+  /* 2. Высококонтрастные поля ввода */
+  .t-form input.t-input:not(.t-input-phonemask__wrap input) {
+    background: #ffffff !important;
+    color: #111111 !important;
+    border: 1.5px solid rgba(244, 114, 182, 0.45) !important;
+    border-radius: 14px !important;
+    height: 56px !important;
+    font-size: 16px !important;
+    font-weight: 500 !important;
+    font-family: 'Montserrat', sans-serif !important;
+    padding: 0 16px !important;
+    box-sizing: border-box !important;
+    outline: none !important;
+  }
+
+  /* 3. Идеальный нативный выбор стран Тильды (без сдвигов на мобильных) */
+  .t-form .t-input-phonemask__wrap {
+    background: #ffffff !important;
+    border: 1.5px solid rgba(244, 114, 182, 0.45) !important;
+    border-radius: 14px !important;
+    height: 56px !important;
+    display: flex !important;
+    align-items: center !important;
+    padding: 0 12px !important;
+    box-sizing: border-box !important;
+    transition: border-color 0.2s, box-shadow 0.2s !important;
+  }
+  .t-form .t-input-phonemask__select {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    color: #111111 !important;
+    font-weight: 700 !important;
+    font-size: 15px !important;
+    cursor: pointer !important;
+    padding-right: 10px !important;
+    border-right: 1px solid #e4e4e7 !important;
+    margin-right: 10px !important;
+    height: 32px !important;
+    flex-shrink: 0 !important;
+    user-select: none !important;
+  }
+  .t-form .t-input-phonemask__wrap input.t-input,
+  .t-form input[type="tel"] {
+    background: transparent !important;
+    border: none !important;
+    color: #111111 !important;
+    height: 100% !important;
+    padding: 0 6px !important;
+    margin: 0 !important;
+    flex: 1 !important;
+    min-width: 0 !important;
+    width: 100% !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    font-family: 'Montserrat', sans-serif !important;
+    outline: none !important;
+    text-align: left !important;
+  }
+  .t-form input::placeholder {
+    color: #71717a !important;
+    opacity: 1 !important;
+  }
+  .t-form .t-input-phonemask__wrap:focus-within,
+  .t-form input.t-input:focus {
+    border-color: #f472b6 !important;
+    box-shadow: 0 0 16px rgba(244, 114, 182, 0.4) !important;
+  }
+
+  /* Выпадающий список стран */
+  .t-input-phonemask__options-wrap {
+    z-index: 99999999 !important;
+    background: #ffffff !important;
+    color: #111111 !important;
+    border-radius: 14px !important;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.35) !important;
+  }
+  .t-input-phonemask__options-item {
+    color: #111111 !important;
+    font-size: 14px !important;
+  }
+
+  /* Динамическая плашка-подсказка */
+  .ssp-contact-hint {
+    background: rgba(244, 114, 182, 0.08) !important;
+    border-left: 3px solid #f472b6 !important;
+    border-radius: 10px !important;
+    padding: 10px 14px !important;
+    margin: 10px 0 16px 0 !important;
+    font-size: 13px !important;
+    color: #fce7f3 !important;
+    line-height: 1.45 !important;
+    text-align: left !important;
+  }
+</style>
+
+<script>
+(function() {
+  function initSspUniversalForm() {
+    var form = document.querySelector('.t-form');
+    if (!form || form.getAttribute('data-ssp-inited') === 'yes') return;
+    form.setAttribute('data-ssp-inited', 'yes');
+
+    // 1. Скрываем лишние дубли полей, если Тильда создала их под каждый мессенджер
+    var dupes = form.querySelectorAll('.t-contact-method__whatsapp-value, .t-contact-method__telegram-value, .t-contact-method__max_messenger-value');
+    dupes.forEach(function(el) {
+      el.style.setProperty('display', 'none', 'important');
+      el.style.setProperty('height', '0', 'important');
+      el.style.setProperty('overflow', 'hidden', 'important');
+    });
+
+    // 2. Внедряем динамический переключатель каналов
+    var phoneBlock = form.querySelector('.t-input-group_contact_method') || form.querySelector('input[type="tel"]').closest('.t-input-group');
+    if (!phoneBlock) return;
+
+    var tabsHtml = document.createElement('div');
+    tabsHtml.className = 'ssp-contact-tabs';
+    tabsHtml.innerHTML = 
+      '<div class="ssp-tab-btn ssp-active" data-method="phone">📞 Телефон</div>' +
+      '<div class="ssp-tab-btn" data-method="telegram">✈️ Telegram</div>' +
+      '<div class="ssp-tab-btn" data-method="whatsapp">💬 WhatsApp</div>' +
+      '<div class="ssp-tab-btn" data-method="max">🌀 MAX</div>';
+    
+    var hintBox = document.createElement('div');
+    hintBox.className = 'ssp-contact-hint';
+    hintBox.innerHTML = '📞 <b>Звонок по телефону:</b> Мы свяжемся с вами в течение 10 минут и ответим на все вопросы.';
+
+    phoneBlock.insertBefore(tabsHtml, phoneBlock.firstChild);
+    phoneBlock.appendChild(hintBox);
+
+    var hints = {
+      phone: '📞 <b>Звонок по телефону:</b> Мы свяжемся с вами в течение 10 минут и ответим на все вопросы.',
+      telegram: '✈️ <b>Связь в Telegram:</b> Укажите номер телефона, привязанный к вашему Telegram. Менеджер напишет вам в чат.',
+      whatsapp: '💬 <b>Связь в WhatsApp:</b> Укажите номер для WhatsApp. Мы отправим вам всю информацию и подборку в чат.',
+      max: '🌀 <b>Мессенджер MAX:</b> Укажите контактный номер для защищенной связи в MAX.'
+    };
+
+    var currentMethod = 'phone';
+    var labelEl = phoneBlock.querySelector('.t-input-title');
+
+    tabsHtml.querySelectorAll('.ssp-tab-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        tabsHtml.querySelectorAll('.ssp-tab-btn').forEach(function(b) { b.classList.remove('ssp-active'); });
+        btn.classList.add('ssp-active');
+        currentMethod = btn.getAttribute('data-method');
+        hintBox.innerHTML = hints[currentMethod] || hints.phone;
+
+        if (labelEl) {
+          if (currentMethod === 'phone') labelEl.textContent = 'Телефон для связи';
+          else if (currentMethod === 'telegram') labelEl.textContent = 'Номер для Telegram';
+          else if (currentMethod === 'whatsapp') labelEl.textContent = 'Номер для WhatsApp';
+          else if (currentMethod === 'max') labelEl.textContent = 'Номер для MAX';
+        }
+      });
+    });
+
+    // 3. Автосбор UTM, гео и склейка данных при отправке формы
+    form.addEventListener('submit', function() {
+      var phoneInp = form.querySelector('.t-contact-method__phone-value input[type="tel"]') || form.querySelector('input[type="tel"]');
+      var maskRes = form.querySelector('.js-phonemask-result');
+      var finalPhone = (maskRes && maskRes.value) ? maskRes.value.trim() : (phoneInp ? phoneInp.value.trim() : '');
+
+      // Копируем телефон во все скрытые поля Тильды
+      var hiddenTargets = form.querySelectorAll('.t-contact-method__telegram-value input, .t-contact-method__whatsapp-value input, .t-contact-method__max_messenger-value input, input[name="messenger-id"]');
+      hiddenTargets.forEach(function(inp) { inp.value = finalPhone; });
+
+      // Переключаем radio мессенджера
+      var radio = form.querySelector('input[name="messenger-type"][value="' + (currentMethod === 'max' ? 'max_messenger' : currentMethod) + '"]');
+      if (radio) radio.checked = true;
+
+      // Записываем UTM и хвосты в поле комментария
+      var commentInp = form.querySelector('input[name="comment"], textarea[name="comment"]');
+      if (!commentInp) {
+        commentInp = document.createElement('input');
+        commentInp.type = 'hidden';
+        commentInp.name = 'comment';
+        form.appendChild(commentInp);
+      }
+      var meta = '[Канал: ' + currentMethod + '] | UTM: ' + window.location.search + ' | Реферер: ' + document.referrer;
+      commentInp.value = (commentInp.value ? commentInp.value + ' | ' : '') + meta;
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSspUniversalForm);
+  } else {
+    initSspUniversalForm();
+  }
+  setTimeout(initSspUniversalForm, 500);
+  setTimeout(initSspUniversalForm, 1500);
+})();
+</script>
